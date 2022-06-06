@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
         $_SESSION["email"] = $email;
 
         echo "<script>alert('Login Success');</script>";
-        echo "<script> window.location.replace('index.php')</script>";
+        echo "<script> window.location.replace('subjectlistpage.php')</script>";
     } else {
         echo "<script>alert('Login Failed');</script>";
         echo "<script> window.location.replace('loginpage.php')</script>";
@@ -36,11 +36,12 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="../js/login.js" defer></script>
 
     <title>Login</title>
 </head>
 
-<body>
+<body onload="loadCookies()"style="max-width:1200px;margin:0 auto;">
 
     <header class="w3-header w3-container w3-padding-32 w3-center" style="background-color: #D6EAF8">
         <h1 class="W3-center" style="text-shadow:1px 1px 0 #444">MY TUTOR</h1>   
@@ -82,11 +83,34 @@ if (isset($_POST['submit'])) {
             </form>
         </div>
     </div>
-        
+    
+    <div id="cookieNotice" class="w3-right w3-block" style="display: none;">
+        <div class="w3-red">
+            <h4>Cookie Consent</h4>
+            <p>This website uses cookies or similar technologies, to enhance your
+                browsing experience and provide personalized recommendations.
+                By continuing to use our website, you agree to our
+                <a style="color:#115cfa;" href="/privacy-policy">Privacy Policy</a>
+            </p>
+            <div class="w3-button">
+                <button onclick="acceptCookieConsent();">Accept</button>
+            </div>
+        </div>
+    </div>
 
 <footer>
     <p class="w3-container w3-padding-32 w3-center" style="background-color: #D6EAF8">Copyright MYTutor&copy;</p>
 </footer>
 
 </body>
+
+<script>
+    let cookie_consent = getCookie("user_cookie_consent");
+    if (cookie_consent != "") {
+        document.getElementById("cookieNotice").style.display = "none";
+    } else {
+        document.getElementById("cookieNotice").style.display = "block";
+    }
+</script>
+
 </html>

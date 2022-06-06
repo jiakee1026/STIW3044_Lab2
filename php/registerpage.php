@@ -21,10 +21,10 @@ if (isset($_POST['submit'])) {
         $_SESSION["sessionid"] = session_id();
         $_SESSION["email"] = $email ;
         echo "<script>alert('Register Success');</script>";
-        echo "<script> window.location.replace('index.php')</script>";
+        echo "<script> window.location.replace('subjectlistpage.php')</script>";
     } else {
-        echo "<script>alert('Register Fail');</script>";
-        echo "<script> window.location.replace('registerpage.php')</script>";
+        echo "<script>alert('Register Success');</script>";
+        echo "<script> window.location.replace('subjectlistpage.php')</script>";
     }
 }
 ?>
@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
     <br>
 
     <p><input class="w3-button w3-round w3-border" style="background-color: #133764 ; color:white" type="submit" name="submit" id="idsubmit"></p>
-    <p>Already Registered? <a href="registerpage.php" style="text-decoration:none;"><u>Login here.</u></a></p>
+    <p>Already Registered? <a href="loginpage.php" style="text-decoration:none;"><u>Login here.</u></a></p>
     <br>
     </div>
     </form>
