@@ -1,30 +1,22 @@
 <?php
 session_start();
+if (!isset($_SESSION['sessionid'])) {
+    echo "<script>alert('Session not available. Please login');</script>";
+    echo "<script> window.location.replace('login.php')</script>";
+}
 include_once("dbconnect.php");
-if ($_SESSION["session_id"]) {
-    if (isset($_GET['subject_id'])) {
-        $subject_id = $_GET['subject_id'];
-        $sqldelete = "DELETE FROM tbl_subjects WHERE subject_id = '$subject_id'";
-        $stmt = $conn->prepare($sqldelete);
-        if ($stmt->execute()) {
-            echo "<script> alert('Delete Success')</script>";
-        } else {
-            echo "<script> alert('Delete Failed')</script>";
-        }
-    }
-    if (isset($_GET['button'])) {
-        $option = $_GET['option'];
+
+    if (isset($_GET['submit'])) {
         $search = $_GET['search'];
-        if ($option == "id") {
-            $sqlsubjects = "SELECT * FROM tbl_subjects WHERE subject_id LIKE '%$search%'";
-        }
-        if ($option == "name") {
-            $sqlsubjects = "SELECT * FROM tbl_subjects WHERE subject_name LIKE '%$search%'";
-        }
+            $sqlsubject = "SELECT * FROM tbl_subjects WHERE subject_name LIKE '%$search%'";
+    }else {
+    $sqlsubject = "SELECT * FROM tbl_subjects";
+    }
  
-    } else {
+    else {
         $sqlsubjects = "SELECT * FROM tbl_subjects ORDER BY date_reg DESC";
     }
+
     $results_per_page = 10;
     if (isset($_GET['pageno'])) {
         $pageno = (int)$_GET['pageno'];
@@ -40,16 +32,16 @@ if ($_SESSION["session_id"]) {
     $stmt->execute();
     $number_of_result = $stmt->rowCount();
     $number_of_page = ceil($number_of_result / $results_per_page);
-
     $sqlsubjects = $sqlsubjects . " LIMIT $page_first_result , $results_per_page";
     $stmt = $conn->prepare($sqlsubjects);
     $stmt->execute();
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $rows = $stmt->fetchAll();
-} else {
-    echo "<script> alert('Session not available. Please login')</script>";
-    echo "<script> window.location.replace('../loginpage.php')</script>";
-}
+
+    function truncate($string, $length, $dots = "...")
+    {
+    return (strlen($string) > $length) ? substr($string, 0, $length - strlen($dots)) . $dots : $string;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +52,7 @@ if ($_SESSION["session_id"]) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="../js/myscript.js"></script>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -71,21 +64,27 @@ if ($_SESSION["session_id"]) {
     <div class="topnavbar" id="myTopnav">
         <a href="../loginpage.php?status=logout" onclick="logout()" class="right">Logout</a>
     </div>
-    <center>
-        <h2>Subject List</h2>
-        <div class="container">
-            <form action="subjectlistpage.php" align="center">
-                <div class="selectsearch">
-                    <input type="search" id="idsearch" name="search" placeholder="Enter search term" />
-                    <select name="option" id="srcid">
-                        <option value="subject_name">By Subject Name</option>
-                        <option value="subject_id">By Id</option>
-                    </select>
-                    <button type="submit" name="button" value="search">search</button>
+
+    <div class="w3-card w3-container w3-padding w3-margin w3-round">
+        <h4>Subjects Search</h4>
+            <form action="subjectlistpage.php">
+                <div class="w3-row">
+                    <div class="w3-half w3-container">
+                        <p><input class="w3-input w3-block w3-round w3-border" type="search" id="idsearch" name="search" placeholder="Enter search term" /></p>
+                    </div>
+                    <div class="w3-half w3-container">
+                        <p><select class="w3-input w3-block w3-round w3-border" name="option" id="srcid">
+                            <option value="subject_name">By Subject Name</option>
+                            <option value="subject_id">By Subject ID</option>
+                        </select><p>
+                     </div>
+                </div>
+                <div class="w3-container">
+                    <p><button class="w3-button w3-blue w3-round w3-right" type="submit" name="button" value="search">search</button></p>
                 </div>
             </form>
-        </div>
-    </center>
+    </div>
+
     <div class="main-landing">
         <center>
             <?php

@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
         $_SESSION["email"] = $email;
 
         echo "<script>alert('Login Success');</script>";
-        echo "<script> window.location.replace('subjectlistpage.php')</script>";
+        echo "<script> window.location.replace('index.php')</script>";
     } else {
         echo "<script>alert('Login Failed');</script>";
         echo "<script> window.location.replace('loginpage.php')</script>";
